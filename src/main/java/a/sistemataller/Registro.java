@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package a.sistemataller;
 
 import javax.swing.JOptionPane;
@@ -191,31 +187,47 @@ public class Registro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        
+
         SqlUsuarios modSql = new SqlUsuarios();
         Usuarios mod = new Usuarios();
-        
+
         String pass = new String(passRegistro.getPassword());
         String passCon = new String(passConfirRegistro.getPassword());
-        
-        if(pass.equals(passCon)){
+        String correo = correoRegistro.getText();
+
+        if (pass.equals(passCon)) {
             String nuevopass = hash.sha1(pass);
-            
+
             //Agregamos los datos a la base
             mod.setUsuario(nameRegistro.getText());
             mod.setPassword(nuevopass);
             mod.setCorreo(correoRegistro.getText());
             mod.setTelefono(telRegistro.getText());
-            
-            if(modSql.registrar(mod)){
-                JOptionPane.showMessageDialog(null, "Registro guardado");
-                limpiar();
-            }else{
+
+            if (modSql.registrar(mod)) {
+
+                if (nameRegistro.getText().trim().isEmpty() || passRegistro.getText().trim().isEmpty()
+                        || passConfirRegistro.getText().trim().isEmpty()
+                        || telRegistro.getText().trim().isEmpty()
+                        || correoRegistro.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Completa tus datos!");
+                } else if (!VerificaCorreo.isValidEmail(correo)){
+                    JOptionPane.showMessageDialog(null, "❌ Correo inválido, intenta de nuevo.");
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Registro guardado");
+                    limpiar();
+                }
+                //registroguardado
+                
+            } else {
                 JOptionPane.showMessageDialog(null, "Error al guardar");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Contraseñas no coinciden ");
         }
+
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnVolverRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverRegistroActionPerformed
@@ -224,14 +236,14 @@ public class Registro extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnVolverRegistroActionPerformed
 
-    private void limpiar(){
+    private void limpiar() {
         nameRegistro.setText("");
         passRegistro.setText("");
         passConfirRegistro.setText("");
         telRegistro.setText("");
         correoRegistro.setText("");
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

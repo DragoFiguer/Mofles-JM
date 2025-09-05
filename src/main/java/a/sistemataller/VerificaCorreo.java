@@ -14,7 +14,7 @@ public class VerificaCorreo {
     public static boolean isValidEmail(String email){
         Pattern p = Pattern.compile(EMAIL_REGEX);
         Matcher m = p.matcher(email);
-        return false;
+        return m.matches();
     }
     
     public static void main(String[] args){
